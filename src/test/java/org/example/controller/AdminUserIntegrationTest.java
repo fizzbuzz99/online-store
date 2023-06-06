@@ -125,4 +125,24 @@ public class AdminUserIntegrationTest {
         assertEquals(product, p);
     }
 
+    @Test
+    public void testRemovingProduct() throws Exception {
+        // Given
+        Product product = Product.builder().name("ink").price(12.34).inventory(10_000).build();
+
+        // When
+        product = mvcWrapper.convertToProduct(mvcWrapper.addNewProduct(product));
+
+        // And
+        MvcResult result = mvcWrapper.getProductById(product.getId());
+
+        // Then
+        assertEquals(product, mvcWrapper.convertToProduct(result));
+
+        // When
+        mvcWrapper.removeProductById(product.getId());
+
+        // Then
+        assertTrue(mvcWrapper.getProduct(product.getId()).getResponse().getContentAsString().isEmpty());
+    }
 }

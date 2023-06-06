@@ -36,11 +36,9 @@ public class StoreServiceImpl extends CommonService implements StoreService {
     }
 
     @Override
-    public Basket findBasketByUserId(Long id) throws StoreServiceException {
-        if (!userRepository.existsById(id)) throw new StoreServiceException("");
-
-        StoreUser user = userRepository.getReferenceById(id);
-        return user.getBasket();
+    public Basket findBasketByUserId(Long id) {
+        if (userRepository.findById(id).isEmpty()) return null;
+        return userRepository.findById(id).get().getBasket();
     }
 
     @Override

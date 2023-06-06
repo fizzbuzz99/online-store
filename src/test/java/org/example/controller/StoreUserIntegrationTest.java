@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.RepositoryClean;
 import org.example.deals.DealType;
 import org.example.model.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,11 +20,15 @@ public class StoreUserIntegrationTest {
     @Autowired
     public MockMvc mvc;
 
+    @Autowired
+    private RepositoryClean repositoryClean;
+
     private MockMvcWrapper mvcWrapper;
 
     @BeforeEach
     public void init() {
         mvcWrapper = new MockMvcWrapper(mvc);
+        repositoryClean.clean();
     }
 
     @Test
@@ -200,6 +205,31 @@ public class StoreUserIntegrationTest {
         offer = receipt.getItems().get(basketItem.getId());
         // Price should be 4*12.35
         assertEquals(49.4, offer.getPrice());
+    }
+
+    @Test
+    public void testRemoveBasketItem() throws Exception {
+        // Given
+        StoreUser user = mvcWrapper.addNewUser("Johny444");
+        Deal deal = mvcWrapper.addNewDeal(DealType.BuyOneGet50PrcOff);
+        Product product = mvcWrapper.convertToProduct(mvcWrapper
+                .addNewProduct(Product.builder().name("Product1").price(12.35)
+                        .inventory(100).deal(deal).build()));
+
+        // When
+        BasketItem basketItem = BasketItem.builder().product(product).quantity(4).build();
+        // And
+        basketItem = mvcWrapper.convertToBasketItem(mvcWrapper.addItemToBasket(basketItem, user.getId()));
+        Receipt receipt = mvcWrapper.convertToReceipt(mvcWrapper.getReceipt(user.getId()));
+        FinalOffer offer = receipt.getItems().get(basketItem.getId());
+        assertEquals(4, offer.getQuantity());
+
+        // When
+        mvcWrapper.removeItemBasket(basketItem.getId());
+
+        // Then
+        receipt = mvcWrapper.convertToReceipt(mvcWrapper.getReceipt(user.getId()));
+        assertEquals(0, receipt.getItems().size());
     }
 
 }

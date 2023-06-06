@@ -69,6 +69,12 @@ public class StoreController {
                 .orElseGet(() -> new ResponseEntity<>(null, HttpStatus.OK));
     }
 
+    @RequestMapping(value = "/admin/product/remove/{productId}", method = RequestMethod.DELETE)
+    public ResponseEntity<Product> removeProductById(@PathVariable("productId") Long productId) {
+        adminService.deleteProductById(productId);
+        return new ResponseEntity<>(null, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/admin/product/deal", method = RequestMethod.POST)
     public ResponseEntity<Deal> addDeal(@RequestBody Deal deal) {
         return new ResponseEntity<>(adminService.saveDeal(deal), HttpStatus.OK);
@@ -96,6 +102,12 @@ public class StoreController {
         } catch (StoreServiceException e) {
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
+    }
+
+    @RequestMapping(value = "/store/user/item/{itemId}/remove", method = RequestMethod.DELETE)
+    public ResponseEntity<BasketItem> removeItemById(@PathVariable("itemId") Long itemId) {
+        storeService.deleteBasketItem(itemId);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/store/user/{userId}/receipt", method = RequestMethod.GET)

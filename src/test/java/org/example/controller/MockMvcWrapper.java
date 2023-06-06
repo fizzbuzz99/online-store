@@ -105,6 +105,14 @@ public class MockMvcWrapper {
                 .andReturn();
     }
 
+    public void removeItemBasket(Long itemId) throws Exception {
+        mvc.perform(MockMvcRequestBuilders
+                        .delete("/store/user/item/" + itemId + "/remove")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
     public MvcResult getReceipt(Long userId) throws Exception {
         return mvc.perform(MockMvcRequestBuilders.get("/store/user/"+userId+"/receipt")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -151,6 +159,20 @@ public class MockMvcWrapper {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
+    }
+
+    public MvcResult getProduct(Long id) throws Exception {
+        return mvc.perform(MockMvcRequestBuilders.get("/admin/product/" + id)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+    }
+
+    public void removeProductById(Long productId) throws Exception {
+        mvc.perform(MockMvcRequestBuilders.delete("/admin/product/remove/" + productId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     public Product convertToProduct(MvcResult result) throws Exception {
