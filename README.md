@@ -2,21 +2,30 @@ online-store
 
 Used frameworks:
 - H2 as data storage
+- Spring Boot
 - JPA as data access
 
 Run all tests: ./gradlew clean test
 
-Note: 2 tests faile since missing requiremets
+Note: 2 tests fail since missing requirements regarding inventory and removing deals
 - StoreUserIntegrationTest > testUserCanNotBuyQuantityThatExceedsInventory() FAILED
 - StoreUserIntegrationTest > testRemovedDealShouldNotBeAppliedToReceipt() FAILED
 
-Build the application: ./gradlew clean build
+Build the application: 
+```
+./gradlew clean build
+```
 
-Build the application without tests: ./gradlew clean build -x test
+Build the application without tests: 
+```
+./gradlew clean build -x test
+```
 
 Run the application:
-- cd ./build/libs
-- java -jar online-store-1.0-SNAPSHOT.jar
+```
+cd ./build/libs 
+java -jar online-store-1.0-SNAPSHOT.jar
+```
 
 Application is exposed on localhost:8080 and can be tested using curl. Below example commands
 
